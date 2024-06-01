@@ -6,10 +6,6 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.PageIsReached;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.clickItem;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.selectField;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.waitPage;
 
 import android.content.Intent;
 
@@ -30,6 +26,7 @@ import io.qameta.allure.kotlin.Epic;
 import io.qameta.allure.kotlin.Story;
 import ru.iteco.fmhandroid.ui.AppActivity;
 import ru.iteco.fmhandroid.ui.PageObject.AboutUsPage;
+import ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions;
 import ru.iteco.fmhandroid.ui.PageObject.LoginPage;
 import ru.iteco.fmhandroid.ui.PageObject.MainPage;
 import ru.iteco.fmhandroid.ui.utilities.LoginData;
@@ -38,6 +35,9 @@ import ru.iteco.fmhandroid.ui.utilities.LoginData;
 @RunWith(AllureAndroidJUnit4.class)
 @Epic("Тест-кейсы для проведения функционального тестирования вкладки 'О приложении' мобильного приложения 'Мобильный хоспис'")
 public class AboutUsTest {
+    static LoginPage loginPage = new LoginPage();
+    static CommonPageFunctions commonPageFunctions = new CommonPageFunctions();
+    static MainPage mainPage = new MainPage();
     private final String aboutMenuItem = "About";
 
     @Rule
@@ -50,19 +50,20 @@ public class AboutUsTest {
     public ScreenshotRule screenshotRule = new ScreenshotRule(ScreenshotRule.Mode.FAILURE,
             String.valueOf(System.currentTimeMillis()));
 
+
     @Before
     public void setUp() {
         try {
-            waitPage(MainPage.mainPageTag);
+            commonPageFunctions.waitPage(MainPage.mainPageTag);
         } catch (Exception e) {
-            waitPage(LoginPage.loginPageTag);
-            selectField(LoginPage.loginField);
-            LoginPage.feelField(LoginPage.loginField, LoginData.trueLogin);
-            selectField(LoginPage.passwordField);
-            LoginPage.feelField(LoginPage.passwordField,LoginData.truePassword);
-            clickItem(LoginPage.signInButton);
-            waitPage(MainPage.mainPageTag);
-            PageIsReached(MainPage.mainPageTag);
+            commonPageFunctions.waitPage(LoginPage.loginPageTag);
+            commonPageFunctions.selectField(LoginPage.loginField);
+            loginPage.feelField(LoginPage.loginField, LoginData.trueLogin);
+            commonPageFunctions.selectField(LoginPage.passwordField);
+            loginPage.feelField(LoginPage.passwordField,LoginData.truePassword);
+            commonPageFunctions.clickItem(LoginPage.signInButton);
+            commonPageFunctions.waitPage(MainPage.mainPageTag);
+            commonPageFunctions.PageIsReached(MainPage.mainPageTag);
         }
     }
 
@@ -70,10 +71,10 @@ public class AboutUsTest {
     @Description("Перейти по ссылке 'Политика конфиденциальности' во вкладке 'О приложении' мобильного приложения 'Мобильный хоспис' и дождаться загрузки информации (Позитивный)")
     @Test
     public void followTheLinkPrivacyPolicyTest() throws InterruptedException {
-        MainPage.clickMainMenuItem(aboutMenuItem);
+        mainPage.clickMainMenuItem(aboutMenuItem);
         Thread.sleep(5000);
         Intents.init();
-        clickItem(AboutUsPage.privacyPolicyLink);
+        commonPageFunctions.clickItem(AboutUsPage.privacyPolicyLink);
         intended(hasData("https://vhospice.org/#/privacy-policy"));
         intended(hasAction(Intent.ACTION_VIEW));
         Intents.release();
@@ -85,10 +86,10 @@ public class AboutUsTest {
     @Description("Перейти по ссылке 'Правила использования' во вкладке 'О приложении' мобильного приложения 'Мобильный хоспис' и дождаться загрузки информации (Позитивный)")
     @Test
     public void followTheLinkTermsOfUseTest() throws InterruptedException {
-        MainPage.clickMainMenuItem(aboutMenuItem);
+        mainPage.clickMainMenuItem(aboutMenuItem);
         Thread.sleep(5000);
         Intents.init();
-        clickItem(AboutUsPage.termsOfUseLink);
+        commonPageFunctions.clickItem(AboutUsPage.termsOfUseLink);
         intended(hasData("https://vhospice.org/#/terms-of-use"));
         intended(hasAction(Intent.ACTION_VIEW));
         Intents.release();

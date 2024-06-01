@@ -1,9 +1,5 @@
 package ru.iteco.fmhandroid.ui.tests;
 
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.PageIsReached;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.clickItem;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.selectField;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.waitPage;
 import static ru.iteco.fmhandroid.ui.utilities.LoginData.trueLogin;
 import static ru.iteco.fmhandroid.ui.utilities.LoginData.truePassword;
 
@@ -21,6 +17,7 @@ import io.qameta.allure.kotlin.Description;
 import io.qameta.allure.kotlin.Epic;
 import io.qameta.allure.kotlin.Story;
 import ru.iteco.fmhandroid.ui.AppActivity;
+import ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions;
 import ru.iteco.fmhandroid.ui.PageObject.LoginPage;
 import ru.iteco.fmhandroid.ui.PageObject.MainPage;
 import ru.iteco.fmhandroid.ui.PageObject.QuotesPage;
@@ -30,6 +27,10 @@ import ru.iteco.fmhandroid.ui.PageObject.QuotesPage;
 
 @Epic("Тест-кейс для проведения функционального тестирования вкладки 'Цитаты' мобильного приложения 'Мобильный хоспис'")
 public class QuotesTest {
+
+    static LoginPage loginPage = new LoginPage();
+    static QuotesPage quotesPage = new QuotesPage();
+    static CommonPageFunctions commonPageFunctions = new CommonPageFunctions();
 
     private final String title = "\"Хоспис для меня - это то, каким должен быть мир.\"";
     private final String description = "\"Ну, идеальное устройство мира в моих глазах. Где никто не оценивает, никто не осудит, где говоришь, и тебя слышат, где, если страшно, тебя обнимут и возьмут за руку, а если холодно тебя согреют.\" Юля Капис, волонтер";
@@ -43,16 +44,16 @@ public class QuotesTest {
     @Before
     public void setUp() {
         try {
-            waitPage(MainPage.mainPageTag);
+            commonPageFunctions.waitPage(MainPage.mainPageTag);
         } catch (Exception e) {
-            waitPage(LoginPage.loginPageTag);
-            selectField(LoginPage.loginField);
-            LoginPage.feelField(LoginPage.loginField,trueLogin);
-            selectField(LoginPage.passwordField);
-            LoginPage.feelField(LoginPage.passwordField,truePassword);
-            clickItem(LoginPage.signInButton);
-            waitPage(MainPage.mainPageTag);
-            PageIsReached(MainPage.mainPageTag);
+            commonPageFunctions.waitPage(LoginPage.loginPageTag);
+            commonPageFunctions.selectField(LoginPage.loginField);
+            loginPage.feelField(LoginPage.loginField,trueLogin);
+            commonPageFunctions.selectField(LoginPage.passwordField);
+            loginPage.feelField(LoginPage.passwordField,truePassword);
+            commonPageFunctions.clickItem(LoginPage.signInButton);
+            commonPageFunctions.waitPage(MainPage.mainPageTag);
+            commonPageFunctions.PageIsReached(MainPage.mainPageTag);
         }
     }
 
@@ -60,9 +61,9 @@ public class QuotesTest {
     @Description("Открытие цитаты в развернутом виде во вкладке 'Цитаты' мобильного приложения 'Мобильный хоспис'(Позитивный)")
     @Test
     public void openingQuoteTest() {
-        clickItem(MainPage.quotesButton);
-        waitPage(QuotesPage.missionLogo);
-        QuotesPage.openQuote(0);
-        QuotesPage.checkTextQuote(description);
+        commonPageFunctions.clickItem(MainPage.quotesButton);
+        commonPageFunctions.waitPage(QuotesPage.missionLogo);
+        quotesPage.openQuote(0);
+        quotesPage.checkTextQuote(description);
     }
 }

@@ -16,11 +16,11 @@ public class QuotesPage {
     public static final int openQuoteButton = R.id.our_mission_item_open_card_image_button;
     public static final int descriptionQuoteField = R.id.our_mission_item_description_text_view;
 
-    public static void openQuote(int position) {
+    public void openQuote(int position) {
         Allure.step("Открытие цитаты");
         onView(withIndex(withId(openQuoteButton), position)).perform(click());
     }
-    public static void checkTextQuote(String description) {
+    public void checkTextQuote(String description) {
         Allure.step("Проверка текста цитаты");
         onView(allOf(withId(descriptionQuoteField), withText(description), isDisplayed()));
     }

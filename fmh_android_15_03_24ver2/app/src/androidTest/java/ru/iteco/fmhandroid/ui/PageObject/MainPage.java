@@ -4,8 +4,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.clickItem;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.waitPage;
 
 import androidx.test.espresso.matcher.RootMatchers;
 
@@ -21,16 +19,18 @@ public class MainPage {
 
     public static final int quotesButton = R.id.our_mission_image_button;
 
-    public static void logOut() {
+    static CommonPageFunctions commonPageFunctions = new CommonPageFunctions();
+
+    public void logOut() {
         Allure.step("log out (выход из профиля)");
-        waitPage(mainPageTag);
+        commonPageFunctions.waitPage(mainPageTag);
         onView(withId(userProfileButton)).perform(click());
         onView(withId(logoutButton)).perform(click());
     }
 
-    public static void clickMainMenuItem(String item) {
+    public void clickMainMenuItem(String item) {
         Allure.step("Выбор(клик) элемента в главном меню");
-        clickItem(mainMenuButton);
+        commonPageFunctions.clickItem(mainMenuButton);
         onView(withText(item))
                 .inRoot(RootMatchers.isPlatformPopup())
                 .perform(click());

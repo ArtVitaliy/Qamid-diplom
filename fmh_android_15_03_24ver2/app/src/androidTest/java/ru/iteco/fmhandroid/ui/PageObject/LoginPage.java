@@ -10,7 +10,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.waitPage;
 import static ru.iteco.fmhandroid.ui.utilities.Utils.childAtPosition;
 import static ru.iteco.fmhandroid.ui.utilities.Utils.waitDisplayed;
 
@@ -30,12 +29,14 @@ public class LoginPage {
     public static final String errorLoginOrPassword = "Wrong login or password";
     public static final String errorEmptyField = "Login and password cannot be empty";
 
-    public static void waitLoginPage() {
+    static CommonPageFunctions commonPageFunctions = new CommonPageFunctions();
+
+    public void waitLoginPage() {
         onView(isRoot()).perform(waitDisplayed(R.id.splashscreen_image_view, 8_000));
         //onView(isRoot()).perform(waitDisplayed(loginField,10000));
     }
 
-    public static void feelField(int field, String inputText) {
+    public void feelField(int field, String inputText) {
         Allure.step("Заполнение выбранного поля текстом: {inputText}");
         onView(
                 allOf(childAtPosition(
@@ -46,16 +47,17 @@ public class LoginPage {
                 .perform(replaceText(inputText), closeSoftKeyboard());
     }
 
-    public static void isNotLogin() {
+    public void isNotLogin() {
         Allure.step("Проверка того, что войти в приложение (логин) НЕ удалось");
         try {
-            waitPage(MainPage.mainPageTag);
+            commonPageFunctions.waitPage(MainPage.mainPageTag);
         } catch (Exception e) {
             //CommonPageFunctions.PageIsReached(loginPageTag);
-        }
-        finally {
-            CommonPageFunctions.PageIsReached(loginPageTag);
+        } finally {
+            commonPageFunctions.PageIsReached(loginPageTag);
         }
     }
-    }
+
+
+}
 

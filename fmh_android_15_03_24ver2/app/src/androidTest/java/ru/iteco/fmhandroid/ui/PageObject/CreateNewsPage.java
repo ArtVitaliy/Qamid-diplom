@@ -13,7 +13,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static ru.iteco.fmhandroid.ui.PageObject.CommonPageFunctions.clickItem;
 
 import android.view.View;
 
@@ -32,7 +31,9 @@ public class CreateNewsPage {
     private static final int descriptionField = R.id.news_item_description_text_input_edit_text;//поле для описания новости
     private static final int okButton = android.R.id.button1; //кнопка ОК
 
-    public static void chooseCategory(String title) {
+    static CommonPageFunctions commonPageFunctions = new CommonPageFunctions();
+
+    public void chooseCategory(String title) {
         Allure.step("Выбрать категорию новости: " + title);
         onView(allOf(withId(categoryButton), withContentDescription("Show dropdown menu"))).perform(click());
         onView(withText(title))
@@ -40,27 +41,44 @@ public class CreateNewsPage {
                 .perform(click());
     }
 
-    public static void addNewsCurrentDate() {
+    public void addNewsCurrentDate() {
         Allure.step("Выбрать текущую дату новой Новости");
-        clickItem(datePublication);
-        clickItem(okButton);
+        commonPageFunctions.clickItem(datePublication);
+        commonPageFunctions.clickItem(okButton);
     }
 
-    public static void addNewsCurrentTime() {
+    public void addNewsCurrentTime() {
         Allure.step("Выбрать текущее время новой Новости");
         onView((withId(timePublication))).perform(click());
         onView((withId(okButton))).perform(click());
     }
 
-    public static void addNewsDescription(String description) {
+    public void addNewsDescription(String description) {
         Allure.step("Добавить описание новой новости " + description);
         onView(withId(descriptionField))
                 .perform(replaceText(description), closeSoftKeyboard());
     }
 
-    public static void saveFreshNews() {
+    public void saveFreshNews() {
         Allure.step("Сохранение новой Новости");
         onView((withId(saveNewsButton))).perform(scrollTo(), click());
+    }
+
+    public void checkToastErrorMessage(String messageError, View decorView) {
+        Allure.step("Появление всплывающего сообщения об ошибке Неверные данные");
+        onView(withText(messageError))
+                .inRoot(withDecorView(Matchers.not(decorView)))
+                .check(matches(isDisplayed()));
+    }
+
+    public void addNewsInvalidDate(String date) {
+        Allure.step("Добавить некорректную дату новой Новости");
+        onView((withId(datePublication))).perform(longClick()).perform(replaceText(date), closeSoftKeyboard());
+    }
+
+    public static void addNewsInvalidTime(String time) {
+        Allure.step("Добавить некорректное время новой Новости");
+        onView((withId(timePublication))).perform(longClick()).perform(replaceText(time), closeSoftKeyboard());
     }
 
 }

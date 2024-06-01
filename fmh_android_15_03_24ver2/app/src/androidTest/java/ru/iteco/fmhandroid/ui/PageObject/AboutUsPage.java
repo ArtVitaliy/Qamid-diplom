@@ -8,6 +8,7 @@ import androidx.test.espresso.ViewInteraction;
 import ru.iteco.fmhandroid.R;
 
 public class AboutUsPage {
+
     public static final int privacyPolicyLink = R.id.about_privacy_policy_value_text_view;
     public static final int termsOfUseLink = R.id.about_privacy_policy_value_text_view;
     public static final ViewInteraction policyText = onView(withText("Политика конфиденциальности"));

@@ -4,11 +4,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
+import android.os.IBinder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.WindowManager;
 
 import androidx.test.espresso.PerformException;
+import androidx.test.espresso.Root;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.util.HumanReadables;
@@ -103,6 +106,27 @@ public class Utils {
                 return matcher.matches(view) && currentIndex++ == index;
             }
         };
+    }
+
+    public static class ToastMatcher extends TypeSafeMatcher<Root> {
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("is toast");
+        }
+
+        @Override
+        public boolean matchesSafely(Root root) {
+            int type = root.getWindowLayoutParams().get().type;
+            if (type == WindowManager.LayoutParams.TYPE_TOAST) {
+                IBinder windowToken = root.getDecorView().getWindowToken();
+                IBinder appToken = root.getDecorView().getApplicationWindowToken();
+                if (windowToken == appToken) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
 

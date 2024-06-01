@@ -38,7 +38,9 @@ public class NewsPage {
 
     public static final int categoryButtonOfFilter = com.google.android.material.R.id.text_input_end_icon;
 
-    public static void findAddedNews(String description) {
+    static CommonPageFunctions commonPageFunctions = new CommonPageFunctions();
+
+    public void findAddedNews(String description) {
         Allure.step("Найти добавленную новость через Cписок всех новостей");
         onView(isRoot()).perform(waitDisplayed(R.id.news_item_description_text_view, 5000));
         onView(withText(description)).check(matches(isDisplayed()));
@@ -46,7 +48,7 @@ public class NewsPage {
     }
 
 
-    public static void checkNewsCategory(String title, int position) {
+    public void checkNewsCategory(String title, int position) {
         Allure.step("Проверить категорию новости в Списке");
         ViewInteraction textView = onView(
                 allOf(withIndex(withId(newsTitleField), position),
@@ -54,7 +56,7 @@ public class NewsPage {
         textView.check(matches(withText(title)));
     }
 
-    public static void chooseCategoryOfNews(String title) {
+    public void chooseCategoryOfNews(String title) {
         Allure.step("Выбрать категорию новости " + title + " в Фильтре");
         onView(allOf(withId(categoryButtonOfFilter), withContentDescription("Show dropdown menu"))).perform(click());
         onView(withText(title))
@@ -62,19 +64,19 @@ public class NewsPage {
                 .perform(click());
     }
 
-    public static void selectStartFilterTimeInterval() {
+    public void selectStartFilterTimeInterval() {
         Allure.step("Выбрать НАЧАЛО интервала для Фильтра - текущую дату");
-        CommonPageFunctions.clickItem(R.id.news_item_publish_date_start_text_input_edit_text);
-        CommonPageFunctions.clickItem(android.R.id.button1);
+        commonPageFunctions.clickItem(R.id.news_item_publish_date_start_text_input_edit_text);
+        commonPageFunctions.clickItem(android.R.id.button1);
     }
 
-    public static void selectEndFilterTimeInterval() {
+    public void selectEndFilterTimeInterval() {
         Allure.step("Выбрать КОНЕЦ интервала для Фильтра - текущую дату");
-        CommonPageFunctions.clickItem(R.id.news_item_publish_date_end_text_input_edit_text);
-        CommonPageFunctions.clickItem(android.R.id.button1);
+        commonPageFunctions.clickItem(R.id.news_item_publish_date_end_text_input_edit_text);
+        commonPageFunctions.clickItem(android.R.id.button1);
     }
 
-    public static void clickFreshNews() {
+    public void clickFreshNews() {
         ViewInteraction recyclerView2 = onView(
                 allOf(withId(R.id.news_list_recycler_view),
                         childAtPosition(
